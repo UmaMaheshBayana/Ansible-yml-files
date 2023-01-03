@@ -1,0 +1,29 @@
+---
+- name: Insall tomcat on app-machine01
+  hosts: app-machine01
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Downlaod Open JDK
+      become: yes
+      yum:
+        name: java-1.8.0-openjdk
+        update_cache: yes
+        state: present
+    - name: Create Directoy
+      become: yes
+      file:
+          path: /home/centos/sanela/server
+          state: directory
+          mode: 0755
+          owner: centos
+          owner: centos
+    - name: Download Tomcat
+      get_url:
+        url: https://archive.apache.org/dist/tomcat/tomcat-8/v8.0.46/bin/apache-tomcat-8.0.46.tar.gz
+        dest: /home/centos/sanela/server
+    - name: Extract archive
+      unarchive:
+        src: /home/centos/sanela/server/apache-tomcat-8.0.46.tar.gz
+        dest: /home/centos/sanela/server/
+        remote_src: yes
